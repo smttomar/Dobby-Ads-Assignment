@@ -28,6 +28,14 @@ A modern **Google Drive-like file management system** built with a full-stack ar
 - View files inside folders
 - Image preview modal (with blur + animation)
 
+### 🌗 Dark Mode & Theme System
+
+- System-based theme detection (OS sync)
+- Manual toggle (🌞 / 🌙 slider)
+- Persistent theme using localStorage
+- Real-time theme update on system change
+- Built using Tailwind CSS v4
+
 ### 🎨 UI/UX (Premium Level)
 
 - Google Drive inspired UI
@@ -139,6 +147,13 @@ npm run dev
 
 ---
 
+🔐 Demo Credentials
+
+Email: testuser@gmail.com  
+Password: smt@18
+
+---
+
 ## 🌍 Environment Variables
 
 ### Backend
@@ -153,7 +168,9 @@ npm run dev
 
 ## 📸 Screenshots
 
-![alt text](image.png)
+![alt text](image-1.png)
+
+![alt text](image-2.png)
 
 ---
 
@@ -173,7 +190,6 @@ npm run dev
 - Drag & drop upload
 - File sharing via link
 - Search & filter system
-- Dark mode 🌙
 
 ---
 
