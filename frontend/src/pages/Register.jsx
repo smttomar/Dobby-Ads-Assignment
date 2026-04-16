@@ -62,7 +62,7 @@ export default function Register() {
 
             toast.success("Account created successfully");
 
-            navigate("/");
+            navigate("/login");
         } catch (err) {
             toast.error(err?.response?.data?.message || "Registration failed");
         } finally {
@@ -143,7 +143,7 @@ export default function Register() {
 
                 <p className="text-sm mt-3 text-center">
                     Already have an account?{" "}
-                    <Link to="/" className="text-blue-500">
+                    <Link to="/login" className="text-blue-500">
                         Login
                     </Link>
                 </p>

@@ -120,7 +120,7 @@ export default function Dashboard() {
                         onClick={() => {
                             setLogoutLoading(true);
                             localStorage.removeItem("token");
-                            window.location.href = "/";
+                            window.location.href = "/login";
                         }}
                         className="bg-zinc-500 text-white px-4 py-2 rounded-lg hover:bg-zinc-600 flex items-center justify-center hover:cursor-pointer"
                     >

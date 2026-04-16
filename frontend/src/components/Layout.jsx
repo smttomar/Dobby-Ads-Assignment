@@ -51,7 +51,7 @@ export default function Layout({ children }) {
                 <button
                     onClick={() => {
                         localStorage.removeItem("token");
-                        window.location.href = "/";
+                        window.location.href = "/login";
                     }}
                     className="flex items-center gap-3 text-zinc-500 hover:text-zinc-600 hover:cursor-pointer transition"
                 >

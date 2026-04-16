@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import toast from "react-hot-toast";
 
-export default function Login() {
+export default function Login({ setIsAuth }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -52,6 +52,8 @@ export default function Login() {
             const res = await API.post("/auth/login", { email, password });
 
             localStorage.setItem("token", res.data.token);
+
+            setIsAuth(true);
 
             toast.success("Login successful");
 
