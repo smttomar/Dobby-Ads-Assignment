@@ -1,11 +1,12 @@
 import File from "../models/File.js";
+import Folder from "../models/Folder.js";
 
 // Upload File
 export const uploadFile = async (req, res) => {
     try {
         const { folder } = req.body;
 
-        // 🔐 Check folder ownership
+        // 🔐 Validate folder ownership
         if (folder) {
             const folderExists = await Folder.findOne({
                 _id: folder,
@@ -17,9 +18,12 @@ export const uploadFile = async (req, res) => {
             }
         }
 
+        // ✅ FIX PATH (IMPORTANT)
+        const cleanPath = req.file.path.replace(/\\/g, "/");
+
         const file = await File.create({
             name: req.file.filename,
-            path: req.file.path,
+            path: cleanPath,
             size: req.file.size,
             folder: folder || null,
             user: req.user._id,
@@ -31,7 +35,7 @@ export const uploadFile = async (req, res) => {
     }
 };
 
-// Get Files in Folder
+// Get Files
 export const getFiles = async (req, res) => {
     try {
         const { folderId } = req.params;

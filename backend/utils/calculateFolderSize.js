@@ -25,7 +25,6 @@ const calculateFolderSize = async (folderId, userId) => {
         const subSize = await calculateFolderSize(sub._id, userId);
         totalSize += subSize;
     }
-
     return totalSize;
 };
 

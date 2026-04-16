@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import folderRoutes from "./routes/folderRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
+import path from "path";
 
 dotenv.config();
 connectDB();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/folders", folderRoutes);
 app.use("/api/files", fileRoutes);
+app.use("/uploads", express.static("uploads"));
 
 app.get("/", (req, res) => {
     res.send("API is running...");
