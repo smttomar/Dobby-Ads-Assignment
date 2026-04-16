@@ -207,7 +207,7 @@ export default function Dashboard() {
                                     alt=""
                                     onClick={() =>
                                         setPreview(
-                                            `http://localhost:8000/${file.path}`,
+                                            `https://dobby-ads-assignment-1pry.onrender.com/${file.path}`,
                                         )
                                     }
                                     className="h-32 w-full object-cover rounded-lg mb-2 cursor-pointer"
