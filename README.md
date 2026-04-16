@@ -1,4 +1,4 @@
-# 🚀 GigFlow – Full Stack Drive Clone (File Management System)
+# 🚀 Full Stack Drive (File Management System)
 
 A modern **Google Drive-like file management system** built with a full-stack architecture using **React, Node.js, MongoDB, and Cloudinary**.
 
