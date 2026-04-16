@@ -6,7 +6,6 @@ export const uploadFile = async (req, res) => {
     try {
         const { folder } = req.body;
 
-        // 🔐 Validate folder ownership
         if (folder) {
             const folderExists = await Folder.findOne({
                 _id: folder,
@@ -18,12 +17,9 @@ export const uploadFile = async (req, res) => {
             }
         }
 
-        // ✅ FIX PATH (IMPORTANT)
-        const cleanPath = req.file.path.replace(/\\/g, "/");
-
         const file = await File.create({
-            name: req.file.filename,
-            path: cleanPath,
+            name: req.file.originalname,
+            path: req.file.path,
             size: req.file.size,
             folder: folder || null,
             user: req.user._id,

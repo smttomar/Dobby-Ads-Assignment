@@ -3,6 +3,8 @@ import API from "../services/api";
 import FolderCard from "../components/FolderCard";
 import Layout from "../components/Layout";
 import { LogOut, Upload, FolderPlus, ImageUp } from "lucide-react";
+import toast from "react-hot-toast";
+import Spinner from "../components/Spinner";
 
 export default function Dashboard() {
     const [folders, setFolders] = useState([]);
@@ -12,6 +14,7 @@ export default function Dashboard() {
     const [path, setPath] = useState([]);
     const [loading, setLoading] = useState(false);
     const [logoutLoading, setLogoutLoading] = useState(false);
+    const [uploadLoading, setUploadLoading] = useState(false);
 
     // 🔥 NEW: preview state
     const [preview, setPreview] = useState(null);
@@ -94,10 +97,15 @@ export default function Dashboard() {
         }
 
         try {
+            setUploadLoading(true);
+
             await API.post("/files", formData);
+
             fetchFiles();
         } catch {
-            alert("Upload failed");
+            toast.error("Upload failed ❌");
+        } finally {
+            setUploadLoading(false);
         }
     };
 
@@ -161,12 +169,24 @@ export default function Dashboard() {
                         <FolderPlus />
                     </button>
 
-                    <label className="bg-[#e93f3f] p-4 text-white px-4 py-2 rounded-lg shadow hover:shadow-2xl cursor-pointer transition hover:scale-105">
-                        <ImageUp />
+                    <label
+                        className={`bg-[#e93f3f] text-white px-4 py-2 rounded-lg shadow hover:shadow-2xl cursor-pointer transition flex items-center justify-center hover:scale-105 ${
+                            uploadLoading ? "opacity-70 cursor-not-allowed" : ""
+                        }`}
+                    >
+                        {uploadLoading ? (
+                            <Spinner />
+                        ) : (
+                            <>
+                                <ImageUp className="inline-block" />
+                            </>
+                        )}
+
                         <input
                             type="file"
                             onChange={uploadFile}
                             className="hidden"
+                            disabled={uploadLoading}
                         />
                     </label>
                 </div>
@@ -203,13 +223,9 @@ export default function Dashboard() {
                                 className="bg-white rounded-2xl shadow hover:shadow-xl hover:scale-105 transition duration-200 p-3"
                             >
                                 <img
-                                    src={`http://localhost:8000/${file.path}`}
+                                    src={file.path}
                                     alt=""
-                                    onClick={() =>
-                                        setPreview(
-                                            `https://dobby-ads-assignment-1pry.onrender.com/${file.path}`,
-                                        )
-                                    }
+                                    onClick={() => setPreview(file.path)}
                                     className="h-32 w-full object-cover rounded-lg mb-2 cursor-pointer"
                                 />
                                 <p className="text-xs text-gray-700 truncate">
