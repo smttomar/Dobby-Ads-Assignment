@@ -6,18 +6,18 @@ export default function Layout({ children }) {
     const [logoutLoading, setLogoutLoading] = useState(false);
 
     return (
-        <div className="flex min-h-screen bg-gray-100">
+        <div className="flex min-h-screen bg-neutral-100 dark:bg-neutral-900">
             {/* Sidebar */}
             <div
-                className={`bg-white shadow-lg p-4 flex flex-col justify-between transition-all duration-300 ${
-                    open ? "w-64" : "w-16"
+                className={`bg-neutral-200 dark:bg-neutral-950 shadow-lg p-4 flex flex-col justify-between transition-all duration-300 ${
+                    open ? "w-50" : "w-16"
                 }`}
             >
                 <div>
                     {/* Toggle Button */}
                     <button
                         onClick={() => setOpen(!open)}
-                        className="mb-6 text-gray-600 hover:text-blue-500 hover:cursor-pointer"
+                        className="mb-6 text-neutral-600 dark:text-neutral-200 hover:text-blue-500 hover:cursor-pointer"
                     >
                         <Menu />
                     </button>
@@ -29,18 +29,24 @@ export default function Layout({ children }) {
                                 size={24}
                                 className="text-blue-500 mb-4"
                             />
-                            <h1 className="text-xl font-bold mb-6">My Drive</h1>
+                            <h1 className="text-xl font-bold mb-6 text-black dark:text-white">
+                                My Drive
+                            </h1>
                         </span>
                     )}
 
                     {/* Menu */}
                     <div className="space-y-4">
-                        <div className="flex items-center gap-3 text-gray-700 cursor-pointer hover:text-blue-500">
+                        <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-100 cursor-pointer hover:text-blue-500">
                             <Folder size={20} />
-                            {open && <span>My Drive</span>}
+                            {open && (
+                                <span className="text-black dark:text-white">
+                                    My Drive
+                                </span>
+                            )}
                         </div>
 
-                        <div className="flex items-center gap-3 text-gray-700 cursor-pointer hover:text-blue-500">
+                        <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-100 cursor-pointer hover:text-blue-500">
                             <Upload size={20} />
                             {open && <span>Uploads</span>}
                         </div>
@@ -53,7 +59,7 @@ export default function Layout({ children }) {
                         localStorage.removeItem("token");
                         window.location.href = "/login";
                     }}
-                    className="flex items-center gap-3 text-zinc-500 hover:text-zinc-600 hover:cursor-pointer transition"
+                    className="flex items-center gap-3 text-zinc-500 dark:text-zinc-200 hover:text-zinc-600 dark:hover:text-zinc-400 hover:cursor-pointer transition"
                 >
                     {logoutLoading ? <Spinner /> : <LogOut size={18} />}
                     {open && <span>Logout</span>}

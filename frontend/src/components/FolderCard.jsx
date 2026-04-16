@@ -21,12 +21,14 @@ export default function FolderCard({ folder, openFolder }) {
     return (
         <div
             onClick={() => openFolder(folder)}
-            className="p-4 bg-white rounded-2xl shadow hover:shadow-xl transition cursor-pointer flex items-center gap-3"
+            className="p-4 bg-white dark:bg-neutral-800 rounded-2xl shadow hover:shadow-xl transition cursor-pointer flex items-center gap-3"
         >
             <Folder className="text-blue-500" />
             <div>
-                <p className="font-semibold">{folder.name}</p>
-                <p className="text-xs text-gray-500">
+                <p className="font-semibold text-black dark:text-white">
+                    {folder.name}
+                </p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">
                     {size === null ? "..." : formatSize(size)}
                 </p>
             </div>

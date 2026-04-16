@@ -2,7 +2,17 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import FolderCard from "../components/FolderCard";
 import Layout from "../components/Layout";
-import { LogOut, Upload, FolderPlus, ImageUp } from "lucide-react";
+import {
+    LogOut,
+    Upload,
+    FolderPlus,
+    ImageUp,
+    Moon,
+    SunIcon,
+    MoonStar,
+    MoonIcon,
+    SunDim,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import Spinner from "../components/Spinner";
 
@@ -15,6 +25,23 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(false);
     const [logoutLoading, setLogoutLoading] = useState(false);
     const [uploadLoading, setUploadLoading] = useState(false);
+
+    const [isDark, setIsDark] = useState(
+        document.documentElement.classList.contains("dark"),
+    );
+    const toggleDarkMode = () => {
+        const newDark = !isDark;
+
+        if (newDark) {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+
+        setIsDark(newDark);
+    };
 
     // 🔥 NEW: preview state
     const [preview, setPreview] = useState(null);
@@ -111,25 +138,45 @@ export default function Dashboard() {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-gray-100 p-6">
+            <div className="min-h-screen bg-neutral-100 dark:bg-neutral-900 p-6">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold">My Drive</h1>
+                    <h1 className="text-2xl font-bold text-black dark:text-white">
+                        My Drive
+                    </h1>
 
-                    <button
-                        onClick={() => {
-                            setLogoutLoading(true);
-                            localStorage.removeItem("token");
-                            window.location.href = "/login";
-                        }}
-                        className="bg-zinc-500 text-white px-4 py-2 rounded-lg hover:bg-zinc-600 flex items-center justify-center hover:cursor-pointer"
-                    >
-                        {logoutLoading ? <Spinner /> : <LogOut size={18} />}
-                    </button>
+                    {/* Right side buttons */}
+                    <div className="flex items-center gap-3">
+                        {/* Theme Toggle FIRST */}
+                        <button
+                            onClick={toggleDarkMode}
+                            className="relative w-14 h-7 flex items-center bg-neutral-300 dark:bg-neutral-700 rounded-full p-1 transition duration-300 hover:cursor-pointer"
+                        >
+                            <div
+                                className={`w-5 h-5 dark:bg-neutral-200 bg-neutral-500 text-white dark:text-black rounded-full shadow-md transform transition duration-300 flex items-center justify-center text-xs ${
+                                    isDark ? "translate-x-7" : "translate-x-0"
+                                }`}
+                            >
+                                {isDark ? <MoonIcon /> : <SunDim />}
+                            </div>
+                        </button>
+
+                        {/* Logout SECOND */}
+                        <button
+                            onClick={() => {
+                                setLogoutLoading(true);
+                                localStorage.removeItem("token");
+                                window.location.href = "/login";
+                            }}
+                            className="bg-zinc-500 text-white px-4 py-2 rounded-lg hover:bg-zinc-600 flex items-center justify-center hover:cursor-pointer"
+                        >
+                            {logoutLoading ? <Spinner /> : <LogOut size={18} />}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Breadcrumb */}
-                <div className="mb-4 flex flex-wrap gap-2 text-sm">
+                <div className="mb-4 flex flex-wrap gap-2 text-sm text-black dark:text-neutral-300">
                     <span
                         className="cursor-pointer text-blue-500 font-medium"
                         onClick={() => {
@@ -156,7 +203,7 @@ export default function Dashboard() {
                 {/* Actions */}
                 <div className="flex flex-wrap gap-3 mb-6">
                     <input
-                        className="border p-2 rounded-lg w-48"
+                        className="border p-2 rounded-lg w-48 bg-white dark:bg-neutral-800 text-black dark:text-white border-neutral-300 dark:border-neutral-700"
                         placeholder="Folder name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -192,12 +239,14 @@ export default function Dashboard() {
                 </div>
 
                 {/* Folders */}
-                <h2 className="text-lg font-semibold mb-2">Folders</h2>
+                <h2 className="text-lg font-semibold mb-2 text-black dark:text-white">
+                    Folders
+                </h2>
 
                 {loading ? (
-                    <p className="text-gray-400">Loading...</p>
+                    <p className="text-neutral-400">Loading...</p>
                 ) : folders.length === 0 ? (
-                    <p className="text-gray-400">No folders here</p>
+                    <p className="text-neutral-400">No folders here</p>
                 ) : (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
                         {folders.map((folder) => (
@@ -211,16 +260,18 @@ export default function Dashboard() {
                 )}
 
                 {/* Files */}
-                <h2 className="text-lg font-semibold mb-2">Files</h2>
+                <h2 className="text-lg font-semibold mb-2 text-black dark:text-white">
+                    Files
+                </h2>
 
                 {files.length === 0 ? (
-                    <p className="text-gray-400">No files here</p>
+                    <p className="text-neutral-400">No files here</p>
                 ) : (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                         {files.map((file) => (
                             <div
                                 key={file._id}
-                                className="bg-white rounded-2xl shadow hover:shadow-xl hover:scale-105 transition duration-200 p-3"
+                                className="bg-white dark:bg-neutral-800 rounded-2xl shadow hover:shadow-xl hover:scale-105 transition duration-200 p-3"
                             >
                                 <img
                                     src={file.path}
@@ -228,7 +279,7 @@ export default function Dashboard() {
                                     onClick={() => setPreview(file.path)}
                                     className="h-32 w-full object-cover rounded-lg mb-2 cursor-pointer"
                                 />
-                                <p className="text-xs text-gray-700 truncate">
+                                <p className="text-xs text-neutral-700 dark:text-neutral-300 truncate">
                                     {file.name}
                                 </p>
                             </div>
@@ -242,7 +293,6 @@ export default function Dashboard() {
                         className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 transition-all duration-300"
                         onClick={() => setPreview(null)}
                     >
-                        {/* Image Container */}
                         <div
                             className="relative animate-[fadeIn_0.3s_ease] scale-95 animate-[zoomIn_0.3s_ease_forwards]"
                             onClick={(e) => e.stopPropagation()}
@@ -253,10 +303,9 @@ export default function Dashboard() {
                                 className="max-h-[85vh] max-w-[90vw] rounded-xl shadow-2xl"
                             />
 
-                            {/* Close Button */}
                             <button
                                 onClick={() => setPreview(null)}
-                                className="absolute -top-4 -right-4 bg-white text-black rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:scale-110 hover:cursor-pointer transition"
+                                className="absolute -top-4 -right-4 bg-white dark:bg-neutral-800 text-black dark:text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:scale-110 hover:cursor-pointer transition"
                             >
                                 ✕
                             </button>

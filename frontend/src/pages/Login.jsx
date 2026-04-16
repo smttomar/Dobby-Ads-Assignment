@@ -66,20 +66,20 @@ export default function Login({ setIsAuth }) {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen bg-gray-100">
-            <div className="bg-white p-6 rounded-2xl shadow-lg w-80">
+        <div className="flex items-center justify-center h-screen bg-neutral-100 dark:bg-neutral-900">
+            <div className="bg-white dark:bg-neutral-800 p-6 rounded-2xl shadow-lg w-80">
                 <img
                     src="/login.png"
                     alt="Logo"
                     className="w-16 mx-auto mb-4"
                 />
-                <h2 className="text-2xl font-bold mb-4 text-center">
+                <h2 className="text-2xl font-bold mb-4 text-center text-black dark:text-white">
                     Welcome Back
                 </h2>
 
                 {/* Email */}
                 <input
-                    className={`w-full mb-4 p-2 border rounded-lg ${
+                    className={`w-full mb-4 p-2 border rounded-lg bg-white dark:bg-neutral-700 text-black dark:text-white border-neutral-300 dark:border-neutral-600 ${
                         errors.email ? "border-red-500" : ""
                     }`}
                     placeholder="Email"
@@ -95,7 +95,7 @@ export default function Login({ setIsAuth }) {
 
                 {/* Password */}
                 <input
-                    className={`w-full mb-4 p-2 border rounded-lg ${
+                    className={`w-full mb-4 p-2 border rounded-lg bg-white dark:bg-neutral-700 text-black dark:text-white border-neutral-300 dark:border-neutral-600 ${
                         errors.password ? "border-red-500" : ""
                     }`}
                     type="password"
@@ -115,12 +115,12 @@ export default function Login({ setIsAuth }) {
                 <button
                     onClick={handleLogin}
                     disabled={loading}
-                    className="w-full bg-zinc-700 text-white py-2 rounded-lg hover:bg-zinc-800 hover:cursor-pointer flex justify-center items-center transition"
+                    className="w-full bg-zinc-600 text-white py-2 rounded-lg hover:bg-zinc-700 hover:cursor-pointer flex justify-center items-center transition"
                 >
                     {loading ? <Spinner /> : "Login"}
                 </button>
 
-                <p className="text-sm mt-3 text-center">
+                <p className="text-sm mt-3 text-center text-black dark:text-neutral-300">
                     Don't have an account?{" "}
                     <Link to="/register" className="text-blue-500">
                         Register
