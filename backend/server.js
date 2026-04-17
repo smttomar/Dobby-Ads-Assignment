@@ -7,6 +7,7 @@ import folderRoutes from "./routes/folderRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import mcpRoutes from "./routes/mcpRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/folders", folderRoutes);
 app.use("/api/files", fileRoutes);
+app.use("/api/mcp", mcpRoutes);
 
 app.get("/", (req, res) => {
     res.send("API is running...");
