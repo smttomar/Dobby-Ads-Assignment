@@ -6,7 +6,7 @@ export default function Layout({ children }) {
     const [logoutLoading, setLogoutLoading] = useState(false);
 
     return (
-        <div className="flex min-h-screen bg-neutral-100 dark:bg-neutral-900">
+        <div className="flex min-h-screen bg-neutral-200 dark:bg-neutral-950">
             {/* Sidebar */}
             <div
                 className={`bg-neutral-200 dark:bg-neutral-950 shadow-lg p-4 flex flex-col justify-between transition-all duration-300 ${

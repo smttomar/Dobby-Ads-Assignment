@@ -138,7 +138,7 @@ export default function Dashboard() {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-neutral-100 dark:bg-neutral-900 p-6">
+            <div className="min-h-screen bg-neutral-100 dark:bg-neutral-900 p-6 rounded-lg shadow-md">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold text-black dark:text-white">
