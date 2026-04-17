@@ -52,6 +52,48 @@ A modern **Google Drive-like file management system** built with a full-stack ar
 
 ---
 
+## 🤖 MCP API Endpoints (AI Integration)
+
+This project includes a basic **MCP (Model Context Protocol)-style endpoint** to allow AI systems to interact with backend functionality.
+
+### 🔗 Endpoint
+
+POST /api/mcp
+
+### 📦 Supported Actions
+
+#### 1. Create Folder
+
+```json
+{
+    "action": "create_folder",
+    "name": "Projects"
+}
+```
+
+#### 2. Get Files
+
+```json
+{
+    "action": "get_files"
+}
+```
+
+#### 3. Get Folders
+
+```json
+{
+    "action": "get_folders"
+}
+```
+
+### 🧠 Description
+
+This endpoint acts as a **tool interface** where structured commands can trigger backend operations.
+It enables future integration with AI assistants (e.g., Claude, ChatGPT tools).
+
+---
+
 ## 🛠️ Tech Stack
 
 ### Frontend
