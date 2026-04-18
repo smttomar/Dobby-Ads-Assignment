@@ -199,11 +199,14 @@ export default function Dashboard() {
     // Confirm delete folder
     const confirmDelete = async () => {
         try {
+            setDeleteLoading(true);
             await API.delete(`/folders/${deleteModal}`);
             setDeleteModal(null);
             fetchFolders();
         } catch {
             toast.error("Delete failed");
+        } finally {
+            setDeleteLoading(false);
         }
     };
 
@@ -214,6 +217,8 @@ export default function Dashboard() {
             fetchFiles();
         } catch {
             toast.error("Failed to delete file");
+        } finally {
+            setDeleteFileLoading(false);
         }
     };
 
