@@ -46,3 +46,25 @@ export const getFiles = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Delete File
+export const deleteFile = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const file = await File.findOne({
+            _id: id,
+            user: req.user._id,
+        });
+
+        if (!file) {
+            return res.status(404).json({ message: "File not found" });
+        }
+
+        await File.deleteOne({ _id: id });
+
+        res.json({ message: "File deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

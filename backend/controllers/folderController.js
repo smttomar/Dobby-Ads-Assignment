@@ -63,3 +63,47 @@ export const getFolderSize = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Delete Folder
+export const deleteFolder = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const folder = await Folder.findOne({
+            _id: id,
+            user: req.user._id,
+        });
+
+        if (!folder) {
+            return res.status(404).json({ message: "Folder not found" });
+        }
+
+        await Folder.deleteOne({ _id: id });
+
+        res.json({ message: "Folder deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Rename Folder
+export const renameFolder = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name } = req.body;
+
+        const folder = await Folder.findOneAndUpdate(
+            { _id: id, user: req.user._id },
+            { name },
+            { new: true },
+        );
+
+        if (!folder) {
+            return res.status(404).json({ message: "Folder not found" });
+        }
+
+        res.json(folder);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
