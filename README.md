@@ -43,12 +43,24 @@ A modern **Google Drive-like file management system** built with a full-stack ar
 - Loading spinners (login, upload, logout)
 - Toast notifications (react-hot-toast)
 - Smooth animations & hover effects
+- Custom modals for rename and delete actions
+- Circular action buttons with hover interactions
+- Smooth animations and transitions
+- Improved user experience for file and folder operations
 
 ### ⚡ Performance & Deployment
 
 - Cloudinary for scalable file storage
 - Deployed on Vercel (frontend) & Render (backend)
 - Optimized API structure
+
+### 🛠️ Advanced File & Folder Management
+
+- Rename folders using a custom modal (no browser prompt)
+- Delete folders with confirmation modal
+- Delete files with confirmation modal
+- Prevents accidental data loss
+- Full CRUD operations implemented
 
 ---
 
