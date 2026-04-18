@@ -12,6 +12,12 @@ import {
     MoonStar,
     MoonIcon,
     SunDim,
+    Delete,
+    Edit,
+    Trash2Icon,
+    Save,
+    Cross,
+    X,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Spinner from "../components/Spinner";
@@ -25,6 +31,10 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(false);
     const [logoutLoading, setLogoutLoading] = useState(false);
     const [uploadLoading, setUploadLoading] = useState(false);
+    const [renameModal, setRenameModal] = useState(null);
+    const [newName, setNewName] = useState("");
+    const [deleteModal, setDeleteModal] = useState(null);
+    const [deleteFileModal, setDeleteFileModal] = useState(null);
 
     const [isDark, setIsDark] = useState(
         document.documentElement.classList.contains("dark"),
@@ -133,6 +143,61 @@ export default function Dashboard() {
             toast.error("Upload failed ❌");
         } finally {
             setUploadLoading(false);
+        }
+    };
+
+    // Delete folder
+    const deleteFolder = async (id) => {
+        try {
+            await API.delete(`/folders/${id}`);
+            fetchFolders();
+        } catch {
+            toast.error("Failed to delete folder");
+        }
+    };
+
+    // Rename folder
+    const renameFolder = async () => {
+        if (!newName.trim()) return;
+
+        try {
+            await API.put(`/folders/${renameModal}`, { name: newName });
+            setRenameModal(null);
+            setNewName("");
+            fetchFolders();
+        } catch {
+            toast.error("Rename failed");
+        }
+    };
+
+    // Delete file
+    const deleteFile = async (id) => {
+        try {
+            await API.delete(`/files/${id}`);
+            fetchFiles();
+        } catch {
+            toast.error("Failed to delete file");
+        }
+    };
+
+    // Confirm delete folder
+    const confirmDelete = async () => {
+        try {
+            await API.delete(`/folders/${deleteModal}`);
+            setDeleteModal(null);
+            fetchFolders();
+        } catch {
+            toast.error("Delete failed");
+        }
+    };
+
+    const confirmDeleteFile = async () => {
+        try {
+            await API.delete(`/files/${deleteFileModal}`);
+            setDeleteFileModal(null);
+            fetchFiles();
+        } catch {
+            toast.error("Failed to delete file");
         }
     };
 
@@ -250,11 +315,32 @@ export default function Dashboard() {
                 ) : (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
                         {folders.map((folder) => (
-                            <FolderCard
-                                key={folder._id}
-                                folder={folder}
-                                openFolder={openFolder}
-                            />
+                            <div key={folder._id} className="relative group">
+                                <FolderCard
+                                    folder={folder}
+                                    openFolder={openFolder}
+                                />
+                                <div className="absolute top-2 right-2 hidden group-hover:flex gap-2">
+                                    <button
+                                        onClick={() => {
+                                            setRenameModal(folder._id);
+                                            setNewName(folder.name);
+                                        }}
+                                        className="text-blue-500 text-xs hover:cursor-pointer transition hover:scale-110"
+                                    >
+                                        <Edit size={16} />
+                                    </button>
+
+                                    <button
+                                        onClick={() =>
+                                            setDeleteModal(folder._id)
+                                        }
+                                        className="text-[#e93f3f] text-xs hover:cursor-pointer transition hover:scale-110"
+                                    >
+                                        <Trash2Icon size={16} />
+                                    </button>
+                                </div>
+                            </div>
                         ))}
                     </div>
                 )}
@@ -271,7 +357,7 @@ export default function Dashboard() {
                         {files.map((file) => (
                             <div
                                 key={file._id}
-                                className="bg-white dark:bg-neutral-800 rounded-2xl shadow hover:shadow-xl hover:scale-105 transition duration-200 p-3"
+                                className="relative group bg-white dark:bg-neutral-800 rounded-2xl shadow hover:shadow-xl hover:scale-105 transition duration-200 p-3"
                             >
                                 <img
                                     src={file.path}
@@ -282,6 +368,12 @@ export default function Dashboard() {
                                 <p className="text-xs text-neutral-700 dark:text-neutral-300 truncate">
                                     {file.name}
                                 </p>
+                                <button
+                                    onClick={() => setDeleteFileModal(file._id)}
+                                    className="absolute -top-1 -right-1 hidden group-hover:flex items-center justify-center w-8 h-8 rounded-full bg-white dark:bg-neutral-800 text-[#e93f3f] hover:cursor-pointer transition hover:scale-110"
+                                >
+                                    <Trash2Icon size={16} />
+                                </button>
                             </div>
                         ))}
                     </div>
@@ -307,12 +399,101 @@ export default function Dashboard() {
                                 onClick={() => setPreview(null)}
                                 className="absolute -top-4 -right-4 bg-white dark:bg-neutral-800 text-black dark:text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:scale-110 hover:cursor-pointer transition"
                             >
-                                ✕
+                                <X />
                             </button>
                         </div>
                     </div>
                 )}
             </div>
+            {renameModal && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 transition">
+                    <div className="bg-white dark:bg-neutral-800 p-6 rounded-xl w-80 shadow-xl animate-[fadeIn_0.3s_ease] animate-[zoomIn_0.3s_ease_forwards]">
+                        <h2 className="text-lg font-semibold mb-4 text-black dark:text-white">
+                            Rename Folder
+                        </h2>
+
+                        <input
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
+                            className="w-full p-2 border rounded-lg mb-4 bg-white dark:bg-neutral-700 text-black dark:text-white"
+                        />
+
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={() => setRenameModal(null)}
+                                className="px-4 py-2 bg-gray-300 dark:bg-neutral-500 rounded-lg hover:bg-gray-400 dark:hover:bg-neutral-600 transition hover:cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={renameFolder}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition hover:cursor-pointer"
+                            >
+                                <Save />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {deleteModal && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-neutral-800 p-6 rounded-xl w-80 shadow-xl animate-[fadeIn_0.3s_ease] animate-[zoomIn_0.3s_ease_forwards]">
+                        <h2 className="text-lg font-semibold mb-2 text-black dark:text-white">
+                            Delete Folder
+                        </h2>
+
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                            Are you sure you want to delete this folder?
+                        </p>
+
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={() => setDeleteModal(null)}
+                                className="px-4 py-2 bg-gray-300 dark:bg-neutral-500 rounded-lg hover:bg-gray-400 dark:hover:bg-neutral-600 transition hover:cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={confirmDelete}
+                                className="px-4 py-2 bg-[#e93f3f] text-white rounded-lg hover:bg-[#c12e2e] transition hover:cursor-pointer"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {deleteFileModal && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-neutral-800 p-6 rounded-xl w-80 shadow-xl animate-[fadeIn_0.3s_ease] animate-[zoomIn_0.3s_ease_forwards]">
+                        <h2 className="text-lg font-semibold mb-2 text-black dark:text-white">
+                            Delete File
+                        </h2>
+
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                            Are you sure you want to delete this file?
+                        </p>
+
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={() => setDeleteFileModal(null)}
+                                className="px-4 py-2 bg-gray-300 dark:bg-neutral-500 rounded-lg hover:bg-gray-400 dark:hover:bg-neutral-600 transition hover:cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={confirmDeleteFile}
+                                className="px-4 py-2 bg-[#e93f3f] text-white rounded-lg hover:bg-[#c12e2e] transition hover:cursor-pointer"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </Layout>
     );
 }
