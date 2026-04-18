@@ -35,6 +35,10 @@ export default function Dashboard() {
     const [newName, setNewName] = useState("");
     const [deleteModal, setDeleteModal] = useState(null);
     const [deleteFileModal, setDeleteFileModal] = useState(null);
+    const [createLoading, setCreateLoading] = useState(false);
+    const [renameLoading, setRenameLoading] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const [deleteFileLoading, setDeleteFileLoading] = useState(false);
 
     const [isDark, setIsDark] = useState(
         document.documentElement.classList.contains("dark"),
@@ -96,6 +100,7 @@ export default function Dashboard() {
         if (!name.trim()) return;
 
         try {
+            setCreateLoading(true);
             await API.post("/folders", {
                 name,
                 parent: currentFolder,
@@ -105,6 +110,8 @@ export default function Dashboard() {
             fetchFolders();
         } catch {
             alert("Error creating folder");
+        } finally {
+            setCreateLoading(false);
         }
     };
 
@@ -149,10 +156,13 @@ export default function Dashboard() {
     // Delete folder
     const deleteFolder = async (id) => {
         try {
+            setDeleteLoading(true);
             await API.delete(`/folders/${id}`);
             fetchFolders();
         } catch {
             toast.error("Failed to delete folder");
+        } finally {
+            setDeleteLoading(false);
         }
     };
 
@@ -161,22 +171,28 @@ export default function Dashboard() {
         if (!newName.trim()) return;
 
         try {
+            setRenameLoading(true);
             await API.put(`/folders/${renameModal}`, { name: newName });
             setRenameModal(null);
             setNewName("");
             fetchFolders();
         } catch {
             toast.error("Rename failed");
+        } finally {
+            setRenameLoading(false);
         }
     };
 
     // Delete file
     const deleteFile = async (id) => {
         try {
+            setDeleteFileLoading(true);
             await API.delete(`/files/${id}`);
             fetchFiles();
         } catch {
             toast.error("Failed to delete file");
+        } finally {
+            setDeleteFileLoading(false);
         }
     };
 
@@ -276,9 +292,10 @@ export default function Dashboard() {
 
                     <button
                         onClick={createFolder}
+                        disabled={createLoading}
                         className="bg-zinc-500 p-4 text-white px-4 py-2 rounded-lg shadow hover:shadow-2xl cursor-pointer transition hover:scale-105"
                     >
-                        <FolderPlus />
+                        {createLoading ? <Spinner /> : <FolderPlus />}
                     </button>
 
                     <label
@@ -428,9 +445,10 @@ export default function Dashboard() {
 
                             <button
                                 onClick={renameFolder}
+                                disabled={renameLoading}
                                 className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition hover:cursor-pointer"
                             >
-                                <Save />
+                                {renameLoading ? <Spinner /> : <Save />}
                             </button>
                         </div>
                     </div>
@@ -457,9 +475,10 @@ export default function Dashboard() {
 
                             <button
                                 onClick={confirmDelete}
+                                disabled={deleteLoading}
                                 className="px-4 py-2 bg-[#e93f3f] text-white rounded-lg hover:bg-[#c12e2e] transition hover:cursor-pointer"
                             >
-                                Delete
+                                {deleteLoading ? <Spinner /> : "Delete"}
                             </button>
                         </div>
                     </div>
@@ -486,9 +505,10 @@ export default function Dashboard() {
 
                             <button
                                 onClick={confirmDeleteFile}
+                                disabled={deleteFileLoading}
                                 className="px-4 py-2 bg-[#e93f3f] text-white rounded-lg hover:bg-[#c12e2e] transition hover:cursor-pointer"
                             >
-                                Delete
+                                {deleteFileLoading ? <Spinner /> : "Delete"}
                             </button>
                         </div>
                     </div>
