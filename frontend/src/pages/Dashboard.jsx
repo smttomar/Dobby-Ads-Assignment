@@ -186,10 +186,13 @@ export default function Dashboard() {
     // Delete file
     const deleteFile = async (id) => {
         try {
+            setDeleteFileLoading(true);
             await API.delete(`/files/${id}`);
             fetchFiles();
         } catch {
             toast.error("Failed to delete file");
+        } finally {
+            setDeleteFileLoading(false);
         }
     };
 
@@ -209,6 +212,7 @@ export default function Dashboard() {
 
     const confirmDeleteFile = async () => {
         try {
+            setDeleteFileLoading(true);
             await API.delete(`/files/${deleteFileModal}`);
             setDeleteFileModal(null);
             fetchFiles();
