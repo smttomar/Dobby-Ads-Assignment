@@ -9,8 +9,8 @@ export default function Layout({ children }) {
         <div className="flex min-h-screen bg-neutral-200 dark:bg-neutral-950">
             {/* Sidebar */}
             <div
-                className={`bg-neutral-200 dark:bg-neutral-950 shadow-lg p-4 flex flex-col justify-between transition-all duration-300 ${
-                    open ? "w-50" : "w-16"
+                className={`bg-neutral-200 dark:bg-neutral-950 p-4 flex flex-col justify-between transition-all duration-300 ${
+                    open ? "w-45" : "w-16"
                 }`}
             >
                 <div>
